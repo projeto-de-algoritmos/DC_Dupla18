@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Matrix } from "../components/Matrix";
 import { Button } from "../components/Button";
+import { strassenMult } from "../utils/math";
 
 
 export function MainPage() {
@@ -31,11 +32,27 @@ export function MainPage() {
         setMatrix3([]);
     }
 
+    const handleMultiplyMatrixes = () => {
+        console.log(matrix1, matrix2)
+        const result = strassenMult(matrix1, matrix2, matrix1.length);
+
+        setMatrix3(result);
+        console.log(result, matrix3)
+    }
+
+    const colNum = {
+        2: 'grid-cols-2',
+        4: 'grid-cols-4',
+        16: 'grid-cols-16',
+        32: 'grid-cols-32',
+        64: 'grid-cols-64'
+    }
+
 
     return (
-        <div className="h-screen w-full flex flex-col items-center justify-start gap-6 text-xl text-zinc-900">
-            <div className="bg-zinc-900 w-full h-24 flex items-center justify-center text-4xl font-bold">
-                <h1 className="text-white">
+        <div className="h-full w-full flex flex-col items-center justify-start gap-6 text-xl text-zinc-900">
+            <div className="bg-zinc-900 w-full h-24 flex items-center justify-center text-4xl font-bold px-4">
+                <h1 className="text-white text-2xl">
                     Multiplicação de Matrizes Quadradas
                 </h1>
             </div>
@@ -52,15 +69,11 @@ export function MainPage() {
                 <Button value={4} buttonFunction={() => handleCreateMatrix(4)} />
 
                 <Button value={16} buttonFunction={() => handleCreateMatrix(16)} />
-
-                {/* <Button value={32} buttonFunction={() => handleCreateMatrix(32)} />
-
-                <Button value={64} buttonFunction={() => handleCreateMatrix(64)} /> */}
             </div>
 
             {
                 matrix1.length && matrix2.length ? (
-                    <div className="flex items-center gap-10 text-2xl font-medium">
+                    <div className="flex flex-col md:flex-row items-center gap-10 text-2xl font-medium">
                         <Matrix matrix={matrix1} id={1} updateMatrix={handleUpdateMatrixValue} />
 
                         <p>X</p>
@@ -70,22 +83,32 @@ export function MainPage() {
                 ) : null
             }
 
+            <button
+                onClick={handleMultiplyMatrixes}
+                className="border-2 border-zinc-900 text-zinc-900 font-medium py-2 px-4 rounded-md"
+            >
+                CALCULAR PRODUTO
+            </button>
+
             {
                 matrix3.length ? (
                     <div className="flex flex-col items-center gap-2 text-2xl font-medium">
                         <p>=</p>
-                        <Matrix matrix={matrix3} disabled />
+
+                        <div className={"bg-transparent border-x-2 border-zinc-900 grid gap-1 py-3 px-1 " + colNum[matrix3.length]}>
+                            {
+                                matrix3.map((row, i) => (
+                                    row.map((el, j) => (
+                                        <p className="w-10 h-10 flex items-center justify-center">
+                                            {el}
+                                        </p>
+                                    ))
+                                ))
+                            }
+                        </div>
                     </div>
                 ) : null
             }
-
-
-            <button
-                onClick={() => console.log(matrix1, matrix2)}
-                className="bg-zinc-900 text-lime-100 py-2 px-4 rounded-md"
-            >
-                LOG
-            </button>
         </div>
     )
 }
