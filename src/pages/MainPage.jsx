@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Matrix } from "../components/Matrix";
 import { Button } from "../components/Button";
-import { strassenMult } from "../utils/math";
+import { createMatrix, strassenMult } from "../utils/math";
 
 
 export function MainPage() {
@@ -11,13 +11,11 @@ export function MainPage() {
 
 
     const handleCreateMatrix = (size) => {
-        setMatrix1(Array.from({ length: size }, () => (
-            Array.from({ length: size }, () => 1)
-        )));
+        const newM1 = createMatrix(size);
+        setMatrix1(newM1);
 
-        setMatrix2(Array.from({ length: size }, () => (
-            Array.from({ length: size }, () => 1)
-        )));
+        const newM2 = createMatrix(size);
+        setMatrix2(newM2);
 
         setMatrix3([]);
     }
